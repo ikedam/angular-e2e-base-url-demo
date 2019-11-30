@@ -1,7 +1,7 @@
 # docker-compose to run e2e tests
 version: '2'
 services:
-  app:
+  angular:
     image: node:12-alpine
     ports:
       - 4200
@@ -12,12 +12,12 @@ services:
       PROTRACTOR_SELENIUM_ADDRESS: http://chrome:4444/
       # This doesn't work though this overrides `baseUrl` in proctractor.conf.js
       # as overridden with dev-server-target.
-      PROTRACTOR_BASE_URL: http://app:4200/
+      PROTRACTOR_BASE_URL: http://angular:4200/
     command:
       - /bin/sh
       - -c
       - |
-        # --base-url=http://app:4200/ causes a following error:
+        # --base-url=http://angular:4200/ causes a following error:
         #   The 'baseUrl' option cannot be used with 'devServerTarget'.
         # See https://github.com/angular/angular-cli/pull/13614
         #
