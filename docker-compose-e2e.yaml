@@ -29,7 +29,8 @@ services:
         && npm run e2e -- \
           --host=0.0.0.0 \
           --port=4200 \
-          --protractor-config=e2e/protractor-docker.conf.js
+          --protractor-config=e2e/protractor-docker.conf.js \
+          --dev-server-target=angular-e2e-base-url-demo:serve:e2e-in-docker
     depends_on:
       - chrome
     networks:

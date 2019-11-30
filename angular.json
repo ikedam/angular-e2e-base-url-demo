@@ -72,6 +72,9 @@
           "configurations": {
             "production": {
               "browserTarget": "angular-e2e-base-url-demo:build:production"
+            },
+            "e2e-in-docker": {
+              "publicHost": "angular:4200"
             }
           }
         },
