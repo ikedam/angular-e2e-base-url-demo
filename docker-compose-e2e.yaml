@@ -15,11 +15,14 @@ services:
       PROTRACTOR_BASE_URL: http://angular:4200/
     command:
       - /bin/sh
+      - -x
       - -c
       - |
         # --base-url=http://angular:4200/ causes a following error:
         #   The 'baseUrl' option cannot be used with 'devServerTarget'.
         # See https://github.com/angular/angular-cli/pull/13614
+        #
+        # --public-host=angular:4200 results `Unknown option: '--public-host'`
         #
         # protractor-docker.conf.js is to use headless chrome in docker
         ( [ -d node_modules ] || npm install ) \
@@ -39,3 +42,10 @@ services:
       - 4444
     networks:
       - default
+    command:
+      - chromedriver
+      - --port=4444
+      - --url-base=/
+      # this means to accept external connections
+      - --whitelisted-ips=
+      - --verbose

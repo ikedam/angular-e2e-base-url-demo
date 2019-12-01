@@ -1,27 +1,52 @@
 # AngularE2eBaseUrlDemo
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.20.
+## Abstract
 
-## Development server
+This is a demonstration to run e2e with selenium node in another host,
+and a demonstration to explain `--base-url` is useful to use with `--dev-server-target`.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## How to use
 
-## Code scaffolding
+1. Run e2e tests
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+    ```
+    docker-compose -f docker-compose-e2e.yaml run --rm --use-aliases angular
+    ```
 
-## Build
+2. It fails as the browser (the `chrome` container) tries to connect http://localhost:4200/ . It should be `http://angular:4200/` .
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+    ```
+    docker-compose -f docker-compose-e2e.yaml logs chrome
+    ```
 
-## Running unit tests
+    Output:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+    ```
+    ... (snip) ...
+    chrome_1   | [1575173816.375][INFO]: Done waiting for pending navigations. Status: ok
+    chrome_1   | [1575173816.376][INFO]: [d83c3381f24927ee12406e474ba24a50] RESPONSE Navigate
+    chrome_1   | [1575173816.393][INFO]: [d83c3381f24927ee12406e474ba24a50] COMMAND ExecuteScript {
+    chrome_1   |    "args": [  ],
+    chrome_1   |    "script": "window.name = \"NG_DEFER_BOOTSTRAP!\" + window.name;window.location.replace(\"http://localhost:4200/\");"
+    chrome_1   | }
+    ... (snip) ...
+    ```
 
-## Running end-to-end tests
+3. clean up
+    ```
+    docker-compose -f docker-compose-e2e.yaml down
+    ```
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+## What happens
 
-## Further help
+* The `angular` container runs `npm scripts e2e`, which lanches an angular server (webpack dev server) and then starts protractor.
+* Protractor connects to the `chrome` container with the webdriver protocol and handle it to connect to the angular server.
+* Actually, it handles to connect to http://localhost:4200/.
+    But it's the URL for the `angular` container, not the one for the `chrome` container.
+    It should be `http://angular:4200/` to let the `chrome` container to connect to the angular server successfully.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## See also
+
+* https://github.com/angular/angular-cli/issues/9242
+* https://github.com/angular/angular-cli/issues/13611
+* https://github.com/angular/angular-cli/pull/13614
