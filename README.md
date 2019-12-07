@@ -1,5 +1,9 @@
 # AngularE2eBaseUrlDemo
 
+** Resolved ** : The hostname in `--host` is used in `baseUrl` of the proctracor.
+You need set up docker-compose to use a static host for the container.
+See https://github.com/angular/angular-cli/issues/16325.
+
 ## Abstract
 
 This is a demonstration to run e2e with selenium node in another host,

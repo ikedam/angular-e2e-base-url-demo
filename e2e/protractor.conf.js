@@ -17,7 +17,7 @@ exports.config = {
   },
   directConnect: !process.env.PROTRACTOR_SELENIUM_ADDRESS,
   seleniumAddress: process.env.PROTRACTOR_SELENIUM_ADDRESS,
-  baseUrl: process.env.PROTRACTOR_BASE_URL || 'http://localhost:4200/',
+  baseUrl: 'http://localhost:4200/',
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,

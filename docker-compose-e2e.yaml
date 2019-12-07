@@ -10,24 +10,19 @@ services:
     working_dir: /app
     environment:
       PROTRACTOR_SELENIUM_ADDRESS: http://chrome:4444/
-      # This doesn't work though this overrides `baseUrl` in proctractor.conf.js
-      # as overridden with dev-server-target.
-      PROTRACTOR_BASE_URL: http://angular:4200/
+    # docker-compose (docker) uses the container id (a random hexadecimal string)
+    # as the host name of containers by default. To specify the hostname in
+    # the `--host` parameter, specify the static hostname here.
+    hostname: angular
     command:
       - /bin/sh
       - -x
       - -c
       - |
-        # --base-url=http://angular:4200/ causes a following error:
-        #   The 'baseUrl' option cannot be used with 'devServerTarget'.
-        # See https://github.com/angular/angular-cli/pull/13614
-        #
-        # --public-host=angular:4200 results `Unknown option: '--public-host'`
-        #
         # protractor-docker.conf.js is to use headless chrome in docker
         ( [ -d node_modules ] || npm install ) \
         && npm run e2e -- \
-          --host=0.0.0.0 \
+          --host=angular \
           --port=4200 \
           --protractor-config=e2e/protractor-docker.conf.js
     depends_on:
